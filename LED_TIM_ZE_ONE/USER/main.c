@@ -32,37 +32,37 @@
 #define Row YdirNumber*8 
 #define Col XdirNumber*16 
 
-#define H138_A_L			 GPIO_ResetBits(GPIOF , GPIO_Pin_0);
-#define H138_A_H			 GPIO_SetBits(GPIOF , GPIO_Pin_0);
-#define H138_B_L			 GPIO_ResetBits(GPIOF , GPIO_Pin_1);
-#define H138_B_H			 GPIO_SetBits(GPIOF , GPIO_Pin_1);
-#define H138_C_L			 GPIO_ResetBits(GPIOF , GPIO_Pin_2);
-#define H138_C_H			 GPIO_SetBits(GPIOF , GPIO_Pin_2);
-#define MBI5026_SDI1_L			 GPIO_ResetBits(GPIOF , GPIO_Pin_3);
-#define MBI5026_SDI1_H			 GPIO_SetBits(GPIOF , GPIO_Pin_3);
-#define MBI5026_SDI2_L			 GPIO_ResetBits(GPIOF , GPIO_Pin_4);
-#define MBI5026_SDI2_H		   GPIO_SetBits(GPIOF , GPIO_Pin_4);
-#define MBI5026_SDI3_L			 GPIO_ResetBits(GPIOF , GPIO_Pin_5);
-#define MBI5026_SDI3_H			 GPIO_SetBits(GPIOF , GPIO_Pin_5);
-#define MBI5026_SDI4_L			 GPIO_ResetBits(GPIOF , GPIO_Pin_11);
-#define MBI5026_SDI4_H			 GPIO_SetBits(GPIOF , GPIO_Pin_11);
-#define MBI5026_SDI5_L			 GPIO_ResetBits(GPIOF , GPIO_Pin_12);
-#define MBI5026_SDI5_H			 GPIO_SetBits(GPIOF , GPIO_Pin_12);
-#define MBI5026_SDI6_L			 GPIO_ResetBits(GPIOF , GPIO_Pin_13);
-#define MBI5026_SDI6_H			 GPIO_SetBits(GPIOF , GPIO_Pin_13);
-#define MBI5026_SDI7_L 		   GPIO_ResetBits(GPIOF , GPIO_Pin_14);
-#define MBI5026_SDI7_H			 GPIO_SetBits(GPIOF , GPIO_Pin_14);
+#define H138_A_L			 GPIO_ResetBits(GPIOF , GPIO_Pin_5);
+#define H138_A_H			 GPIO_SetBits(GPIOF , GPIO_Pin_5);
+#define H138_B_L			 GPIO_ResetBits(GPIOF , GPIO_Pin_3);
+#define H138_B_H			 GPIO_SetBits(GPIOF , GPIO_Pin_3);
+#define H138_C_L			 GPIO_ResetBits(GPIOF , GPIO_Pin_1);
+#define H138_C_H			 GPIO_SetBits(GPIOF , GPIO_Pin_1);
+#define H138_D_L  		GPIO_ResetBits(GPIOF , GPIO_Pin_0);
+#define H138_D_H  		GPIO_SetBits(GPIOF , GPIO_Pin_0);
 
+#define MBI5026_OE_L   GPIO_ResetBits(GPIOG , GPIO_Pin_13); 
+#define MBI5026_OE_H   GPIO_SetBits(GPIOG , GPIO_Pin_13);
 
+#define MBI5026_SDI1_L			 GPIO_ResetBits(GPIOG , GPIO_Pin_15);
+#define MBI5026_SDI1_H			 GPIO_SetBits(GPIOG , GPIO_Pin_15);
+#define MBI5026_SDI2_L			 GPIO_ResetBits(GPIOG , GPIO_Pin_8);
+#define MBI5026_SDI2_H		   GPIO_SetBits(GPIOG , GPIO_Pin_8);
+#define MBI5026_SDI3_L			 GPIO_ResetBits(GPIOG , GPIO_Pin_2);
+#define MBI5026_SDI3_H			 GPIO_SetBits(GPIOG , GPIO_Pin_2);
+#define MBI5026_SDI4_L			 GPIO_ResetBits(GPIOE , GPIO_Pin_14);
+#define MBI5026_SDI4_H			 GPIO_SetBits(GPIOE , GPIO_Pin_14);
+#define MBI5026_SDI5_L			 GPIO_ResetBits(GPIOE , GPIO_Pin_15);
+#define MBI5026_SDI5_H			 GPIO_SetBits(GPIOE , GPIO_Pin_15);
+#define MBI5026_SDI6_L			 GPIO_ResetBits(GPIOF , GPIO_Pin_12);
+#define MBI5026_SDI6_H			 GPIO_SetBits(GPIOF , GPIO_Pin_12);
+#define MBI5026_SDI7_L 		   GPIO_ResetBits(GPIOE , GPIO_Pin_5);
+#define MBI5026_SDI7_H			 GPIO_SetBits(GPIOE , GPIO_Pin_5);
 
-#define MBI5026_OE_L   GPIO_ResetBits(GPIOF , GPIO_Pin_15); 
-#define MBI5026_OE_H   GPIO_SetBits(GPIOF , GPIO_Pin_15);
-#define H138_D_L  GPIO_ResetBits(GPIOG , GPIO_Pin_0);
-#define H138_D_H  GPIO_SetBits(GPIOG , GPIO_Pin_0);
-#define MBI5026_CLK_L  GPIO_ResetBits(GPIOG , GPIO_Pin_1);
-#define MBI5026_CLK_H  GPIO_SetBits(GPIOG , GPIO_Pin_1);
-#define MBI5026_LE_L	 GPIO_ResetBits(GPIOG , GPIO_Pin_2);
-#define MBI5026_LE_H   GPIO_SetBits(GPIOG , GPIO_Pin_2);
+#define MBI5026_CLK_L  GPIO_ResetBits(GPIOG , GPIO_Pin_11);
+#define MBI5026_CLK_H  GPIO_SetBits(GPIOG , GPIO_Pin_11);
+#define MBI5026_LE_L	 GPIO_ResetBits(GPIOG , GPIO_Pin_9);
+#define MBI5026_LE_H   GPIO_SetBits(GPIOG , GPIO_Pin_9);
 
 /* Private function prototypes -----------------------------------------------*/
 void GPIO_Configuration(void);
@@ -98,7 +98,7 @@ int main(void)
     while (1)
 		{
 		//编写程序更新显示库disBuff数组；
-			for(i=0; i<Row ; i++)
+		/*	for(i=0; i<Row ; i++)
 				{
 						for(j=0;j<Col/8;j++)
 						{
@@ -111,16 +111,11 @@ int main(void)
 			          
 							}							
 						}
-				}
+				}*/
 			   Light();
 			   delay_ms(1000);
 				 Clean();
 			   delay_ms(1000);
-				 Light();
-				 delay_ms(1000);
-				 Clean();
-				 delay_ms(1000);		
-				 delay_ms(1000);
 			
     }
 
@@ -138,15 +133,18 @@ void GPIO_Configuration(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
   
-  RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOF | RCC_APB2Periph_GPIOG, ENABLE); 						 
+  RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOF | RCC_APB2Periph_GPIOG | RCC_APB2Periph_GPIOE, ENABLE); 						 
 				 
-  GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5| GPIO_Pin_10| GPIO_Pin_11| GPIO_Pin_12| GPIO_Pin_13| GPIO_Pin_14| GPIO_Pin_15 ;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_3 | GPIO_Pin_5| GPIO_Pin_12 ;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD; 
   GPIO_Init(GPIOF, &GPIO_InitStructure);
 	
-	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 ;
+	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_2 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_11 | GPIO_Pin_13 | GPIO_Pin_15 ;
 	GPIO_Init(GPIOG, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_5 | GPIO_Pin_14 | GPIO_Pin_15 ;
+	GPIO_Init(GPIOE, &GPIO_InitStructure);
 }
 
 /*******************************************************************************
