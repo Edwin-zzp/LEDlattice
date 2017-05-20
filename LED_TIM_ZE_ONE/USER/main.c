@@ -70,7 +70,12 @@ void NVIC_Configuration(void);
 void TIM_Configuration(void);
 void Clean(void);
 void Light(void);
-void  Delay (uint32_t nCount);
+void Delay (uint32_t nCount);
+void Drow_point(unsigned char x,unsigned char y,unsigned char dat);
+void Drow_line(unsigned char x1,unsigned char y1,unsigned char x2,unsigned char y2,unsigned char dat);
+
+
+
 /* Private variables ---------------------------------------------------------*/	
 static uint8_t disBuff[56][14];
 static uint8_t linecount=0;
@@ -112,6 +117,7 @@ int main(void)
 							}							
 						}
 				}*/
+				Drow_point(55,111,1);
 			   Light();
 			   delay_ms(1000);
 				 Clean();
@@ -192,6 +198,34 @@ void NVIC_Configuration(void)
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;   //配置响应优先级	
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;	 //使能优先级
   NVIC_Init(&NVIC_InitStructure);
+}
+
+
+/*******************************************************************************
+* Function Name  : Drow_point
+* Description    : 绘制点
+* Input          : 要绘制点的x，y坐标，要绘制的值dat,1为亮
+* Output         : None
+* Return         : None
+* Attention		 : None
+*******************************************************************************/
+void Drow_point (unsigned char x,unsigned char y,unsigned char dat)
+{
+		if(dat==1)disBuff[x][y/8]|=0x80>>(y%8);
+		else disBuff[x][y/8]&=~(0x80>>(y%8));		
+}
+
+/*******************************************************************************
+* Function Name  : Drow_line
+* Description    : 绘制线
+* Input          : 起点x1，y1.终点x2，y2. 绘制的值dat，1为亮
+* Output         : None
+* Return         : None
+* Attention		 : None
+*******************************************************************************/
+void Drow_line(unsigned char x1,unsigned char y1,unsigned char x2,unsigned char y2,unsigned char dat)
+{
+	
 }
 
 
