@@ -24,6 +24,7 @@
 #include "stm32f10x.h"
 #include "systick.h"
 #include <stdio.h>
+#include "Pic_h.h"
 
 /* Difine ------------------------------------------------------------------*/
 
@@ -71,8 +72,19 @@ void TIM_Configuration(void);
 void Clean(void);
 void Light(void);
 void Delay (uint32_t nCount);
-void Drow_point(unsigned char x,unsigned char y,unsigned char dat);
-void Drow_line(unsigned char x1,unsigned char y1,unsigned char x2,unsigned char y2,unsigned char dat);
+
+
+
+void Drow_point(int x,int y,unsigned char dat);
+void Drow_line(int x1,int y1,int x2,int y2,int dat);
+void square_clock(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod,uint8_t speed);
+void square_rim(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t speed);
+void square_door(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod,uint8_t speed);
+
+void Drow_circle(int xc,int yc,int r,int mod,int c );
+
+void Drow_picture_all(unsigned char *p);
+void Dorw_bmp(int xc,int yc,uint8_t w,uint8_t h,uint8_t *p, uint8_t mod);
 
 
 
@@ -80,6 +92,8 @@ void Drow_line(unsigned char x1,unsigned char y1,unsigned char x2,unsigned char 
 static uint8_t disBuff[56][14];
 static uint8_t linecount=0;
 //static uint8_t 
+
+
 
 /*******************************************************************************
 * Function Name  : main
@@ -98,6 +112,20 @@ int main(void)
 	NVIC_Configuration();
 	TIM_Configuration();
 	Clean();
+	//Drow_line(0,0,0,112,1);
+	//Drow_line(0,0,55,0,1);
+	//Drow_line(55,0,55,112,1);
+	//Drow_line(0,111,55,111,1);
+	//Drow_picture_all(Pic1);
+	Dorw_bmp(5,10,24,30,Pic2,1);
+	//disBuff[0][12]=0x80;
+	//disBuff[1][12]=0x80;
+	//disBuff[2][12]=0x80;
+	//disBuff[3][12]=0x80;
+	//disBuff[4][12]=0x80;
+	//disBuff[5][12]=0x80;
+	//disBuff[6][12]=0x80;
+	//disBuff[7][12]=0x80;
 	
     /* Infinite loop */
     while (1)
@@ -108,24 +136,554 @@ int main(void)
 						for(j=0;j<Col/8;j++)
 						{
 							disBuff[i][j]=0x80;
-							delay_ms(1);
+							delay_ms(100);
 							for(m=0;m<8;m++)
 							{
 								disBuff[i][j]=disBuff[i][j]>>1;
-								delay_ms(1);
+								delay_ms(100);
 			          
 							}							
 						}
 				}*/
-				Drow_point(55,111,1);
-			   Light();
-			   delay_ms(1000);
-				 Clean();
-			   delay_ms(1000);
+			
+			/*for(i=0;i<Row;i++)
+			{
+				Drow_point(i,96,1);
+			}*/
+			
+		/*	for(i=0;i<10;i++)
+			{
+				Drow_circle(28,56,10+i,0,1,20);
+				delay_ms(10);
+			}*/
+			//square_clock(0,0,56,111,1,8);
+		//	delay_ms(1000);
+			//square_clock(0,0,56,111,0,8);
+			//delay_ms(1000);
+			//Drow_circle(28,56,20,1,1,20);
+			//square_rim(0,0,55,111,20);
+			//square_door(32,3,46,18,0,80);
+			//square_door(0,0,55,111,1,80);
+			//Drow_line(55,96,55,0,1);
+			//Drow_line(11,0,11,97,1);
+			//Drow_line(19,0,19,97,1);
+			//Drow_line(27,0,27,97,1);
+			//Drow_line(35,0,35,97,1);
+			//Drow_line(43,0,43,97,1);
+			//Drow_line(51,0,51,97,1);
+			/*Drow_point(0,0,1);
+			Drow_point(0,96,1);
+			Drow_point(8,96,1);
+			Drow_point(16,96,1);
+			Drow_point(24,96,1);
+			Drow_point(32,96,1);
+			Drow_point(40,96,1);
+			Drow_point(48,96,1);
+				Drow_point(55,0,1);
+			Drow_point(55,96,1);
+			 Drow_point(27,55,1);*/
+				//Drow_picture_all(Pic1);
+			  // Light();
+			//   delay_ms(1000);
+			//	 Clean();
+			//   delay_ms(500);
 			
     }
 
 }
+
+/*******************************************************************************
+* Function Name  : Dorw_bmp
+* Description    : 绘制圆
+* Input          : xc、yc贴图左上角位置。w，h为图片宽高。p位图片数组。mod为1时贴图，为0时删图
+* Output         : None
+* Return         : None
+* Attention		 : None
+*******************************************************************************/
+
+void Dorw_bmp(int xc,int yc,uint8_t w,uint8_t h,uint8_t *p , uint8_t mod)
+{
+	 //uint16_t psize= w*h;
+	 uint16_t i,j,m;
+	 uint8_t data;
+	 if(w+yc<0||h+xc<0||yc>Col||xc>Row)
+	 {
+		 return;
+	 }
+	 for(i=0;i<h;i++)
+		for(j=0;j<w/8;j++)
+		{
+			if(mod)
+				{
+					//disBuff[i][j]=*(p+i*((yc+w)<Col?w:(Col-yc))+j);
+					data=*(p+i*(w/8)+j);
+					for(m=0;m<8;m++)
+					{
+								Drow_point(xc+i,yc+j*8+m,((data&0x80)==0?0:1));
+								data<<=1;
+					}	
+				}
+				else
+				{			
+					for(m=0;m<8;m++)
+						{
+								Drow_point(xc+i,yc+m,0);
+						}
+				}
+		}
+}
+
+
+/*******************************************************************************
+* Function Name  : Drow_picture_all
+* Description    : 绘制图片
+* Input          : 绘制图片的数组地址
+* Output         : None
+* Return         : None
+* Attention		 : None
+*******************************************************************************/
+void Drow_picture_all(unsigned char *p)
+{
+	unsigned char i,j;
+	for(i=0; i<Row ; i++)
+	{
+		for(j=0;j<Col/8;j++)
+		{
+			disBuff[i][j]=*(p+i*(Col/8)+j);
+		}
+	}
+}
+
+
+/*******************************************************************************
+* Function Name  : Drow_circle
+* Description    : 绘制圆
+* Input          : x1,y1,圆心，r半径。 mod 扫描方式. c,1为画圆，0为擦除圆，speed画圆速度
+* Output         : None
+* Return         : None
+* Attention		 : None
+*******************************************************************************/
+
+void _draw_circle_8(int xc, int yc, int x, int y, unsigned char c)   
+{    
+   
+	    Drow_point(xc + x, yc + y, c);    
+	    Drow_point(xc - x, yc + y, c);    
+	    Drow_point(xc + x, yc - y, c);   
+	    Drow_point(xc - x, yc - y, c);    
+			Drow_point(xc + y, yc + x, c);   
+	    Drow_point(xc - y, yc + x, c);    
+	    Drow_point(xc + y, yc - x, c);    
+	    Drow_point(xc - y, yc - x, c);    
+}       
+
+void Drow_circle(int xc,int yc,int r,int mod,int c )
+{
+	  //xc、yc为圆心坐标，
+	   int x = 0, y = r, yi, d;   
+		//int x = 0, y = r, yi ; 
+	 // float d=0.0;
+	if(xc + r < 0 || xc - r >= Row || yc + r < 0 || yc - r >= Col)   
+	    {  
+	        return;  
+	    }  
+			
+         // d = 3 - 2 * r;    
+					//d=1.25-r;
+			   d=1-r;
+	 /*   if(mod)  
+	    {    
+	        // 画实心圆  
+	        while(x <= y)   
+	        {    
+	            for(yi = x; yi <= y; yi ++)    
+	            {  
+	                _draw_circle_8( xc, yc, x, yi, c);    
+	            }  
+             if(d < 0)   
+	            {    
+	                d = d + 4 * x + 6;    
+	            }   
+	            else   
+	            {    
+	                d = d + 4 * (x - y) + 10;    
+	                y --;    
+	            }    
+	  
+	            x++;    
+	        }    
+	    }   
+	    else   
+	    {    
+	        // 画空心圆    
+	        while (x <= y)   
+	        {    
+	            _draw_circle_8(xc, yc, x, y, c);    
+	  
+	            if(d < 0)   
+	            {    
+	                d = d + 4 * x + 6;    
+	            }   
+	            else   
+	            {    
+	                d = d + 4 * (x - y) + 10;    
+	                y --;    
+	            }    
+	  
+	            x ++;    
+	        }    
+	    } */
+			 if(mod)  
+	    {    
+	        // 画实心圆  
+	        while(x <= y)   
+	        {    
+	            for(yi = x; yi <= y; yi ++)    
+	            {  
+	                _draw_circle_8( xc, yc, x, yi, c);    
+	            }  
+             if(d < 0)   
+	            {    
+	                d = d + 2 * x + 3;    
+	            }   
+	            else   
+	            {    
+	                d = d + 2 * (x - y) + 5;    
+	                y --;    
+	            }    
+	  
+	            x++;    
+	        }    
+	    }   
+	    else   
+	    {    
+	        // 画空心圆    
+	        while (x <= y)   
+	        {    
+	            _draw_circle_8(xc, yc, x, y, c);    
+	  
+	            if(d < 0)   
+	            {    
+	                d = d + 2 * x + 3;    
+	            }   
+	            else   
+	            {    
+	                d = d + 2 * (x - y) + 5;    
+	                y --;    
+	            }    
+	  
+	            x ++;    
+	        }    
+	    } 
+}   
+
+
+
+/*******************************************************************************
+* Function Name  : square_door
+* Description    : 矩形范围开门
+* Input          : x1,y1,x2,y2正方形对角坐标，左上角为1顺时针方向 ,  mod 扫描方式 0是左边开门，1是中间往两边开 .   speed扫描速度
+* Output         : None
+* Return         : None
+* Attention		 : None
+*******************************************************************************/
+
+void square_door(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod,uint8_t speed)
+{
+	uint8_t i=0;
+	if(mod==0)
+	{
+		for(i=0;i<(y2-y1)+1;i++)
+		{
+			Drow_line(x1,y1+i,x2,i+y1,1);
+			delay_ms(speed);
+		}
+	}
+	if(mod==1)
+	{
+		uint8_t midx,midy;
+		midx=x1+(x2-x1)/2;
+		midy=y1+(y2-y1)/2;
+		for(i=0;i<((y2-y1)/2)+1;i++)
+		{
+			Drow_line(x1,midy+i,x2,midy+i,1);
+			Drow_line(x1,midy-i,x2,midy-i,1);
+			delay_ms(speed);
+		}
+	}
+}
+
+/*******************************************************************************
+* Function Name  : square_rim
+* Description    : 矩形轮廓扫描
+* Input          : x1,y1,x2,y2矩形对角坐标，左上角为1顺时针方向 , speed扫描速度
+* Output         : None
+* Return         : None
+* Attention		 : None
+*******************************************************************************/
+
+void square_rim(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t speed)
+{
+	uint8_t i=0;
+	for(i=0;i<(y2-y1)+1;i++)
+	{
+		Drow_line(x1,y1,x1,i+y1,1);
+		delay_ms(speed);
+	}
+	for(i=0;i<(x2-x1)+1;i++)
+	{
+		Drow_line(x1,y2,i+x1,y2,1);
+		delay_ms(speed);
+	}
+	for(i=0;i<(y2-y1)+1;i++)
+	{
+		Drow_line(x2,y2,x2,y2-i,1);
+		delay_ms(speed);
+	}
+	for(i=0;i<(x2-x1)+1;i++)
+	{
+		Drow_line(x2,y1,x2-i,y1,1);
+		delay_ms(speed);
+	}
+}
+
+
+/*******************************************************************************
+* Function Name  : square_clock
+* Description    : 矩形轮廓以钟表扫描方式填充
+* Input          : x1,y1,x2,y2正方形对角坐标，左上角为1顺时针方向 ,  mod 扫描方式，1为填充扫描，0为指针扫描 .   speed扫描速度
+* Output         : None
+* Return         : None
+* Attention		 : None
+*******************************************************************************/
+void square_clock(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod,uint8_t speed)
+{
+	uint8_t midx,midy,i;
+	midx=x1+(x2-x1)/2;
+	midy=y1+(y2-y1)/2;
+		    for(i=0; i<(y2-y1)+1 ; i++)
+				{
+					 Drow_line(midx,midy,x1,i+y1,1);
+					if(mod==0)
+					{
+						delay_ms(speed);
+						Drow_line(midx,midy,x1,i+y1,0);
+					}
+					 delay_ms(speed);
+				}
+				
+				for(i=0; i<(x2-x1)+1 ; i++)
+				{
+					 Drow_line(midx,midy,i+x1,y2,1);
+					if(mod==0)
+						{
+							delay_ms(speed);
+							Drow_line(midx,midy,i+x1,y2,0);
+						}
+					 delay_ms(speed);
+				}
+				
+				for(i=0; i<(y2-y1)+1 ; i++)
+				{
+					 Drow_line(midx,midy,x2,y2-i,1);
+					if(mod==0)
+						{
+							delay_ms(speed);
+							Drow_line(midx,midy,x2,y2-i,0);
+						}
+					 delay_ms(speed);
+				}
+				
+	      for(i=0; i<(x2-x1)+1 ; i++)
+				{
+					 Drow_line(midx,midy,x2-i,y1,1);
+					if(mod==0)
+						{
+							delay_ms(speed);
+							Drow_line(midx,midy,x2-i,y1,0);
+						}
+					 delay_ms(speed);
+				}
+}
+
+/*******************************************************************************
+* Function Name  : Line_move
+* Description    : 线段移动   水平垂直移动
+* Input          : x1,y1线段的头坐标。x2，y2线段运动终点坐标。l：线长度。h：线段宽度。speed：移动速度
+* Output         : None
+* Return         : None
+* Attention		 : None
+*******************************************************************************/
+
+void Line_move(int x1,int y2,uint8_t l,uint8_t h,uint8_t speed)
+{
+	
+}
+
+
+
+/*******************************************************************************
+* Function Name  : Drow_point
+* Description    : 绘制点
+* Input          : 要绘制点的x，y坐标，要绘制的值dat,1为亮
+* Output         : None
+* Return         : None
+* Attention		 : None
+*******************************************************************************/
+void Drow_point (int x,int y,unsigned char dat)
+{
+	if(x<0||y<0||x>Row||y>Col)
+	{
+		return;
+	}
+	else{
+		if(dat==1)disBuff[x][y/8]|=0x80>>(y%8);
+		else disBuff[x][y/8]&=~(0x80>>(y%8));		
+	}
+}
+
+
+
+/*******************************************************************************
+* Function Name  : Drow_line
+* Description    : 绘制线
+* Input          : 起点x1，y1.终点x2，y2. 绘制的值dat，1为亮
+* Output         : None
+* Return         : None
+* Attention		 : None
+*******************************************************************************/
+void swap_int(int *a, int *b)   
+{    
+	    *a ^= *b;    
+	    *b ^= *a;    
+	    *a ^= *b;    
+}
+
+int abs (int x)
+{
+	return x=x>0?x:-x;
+}
+
+void Drow_line(int x1,int y1,int x2,int y2,int dat)
+{
+		int ix,iy,cx,cy,n2dy,n2dydx,d;
+		  int dx = abs(x2 - x1),    
+	        dy = abs(y2 - y1),    
+	        yy = 0;    
+	  
+	    if(dx < dy)   
+	    {    
+	        yy = 1;    
+	        swap_int(&x1, &y1);    
+	        swap_int(&x2, &y2);    
+	        swap_int(&dx, &dy);    
+	    }        
+	    
+					ix = (x2 - x1) > 0 ? 1 : -1;    
+	        iy = (y2 - y1) > 0 ? 1 : -1;    
+	        cx = x1;   
+	        cy = y1;    
+	        n2dy = dy * 2;    
+	        n2dydx = (dy - dx) * 2;    
+	        d = dy * 2 - dx;        
+  
+	//如果直线与x轴夹角大于45度
+	    if(yy)  
+	    {   
+				while((x2 - x1) > 0?cx != x2+1:cx != x2-1)   
+	        {   
+						 Drow_point(cy, cx, dat);
+	            if(d < 0)   
+            {    
+	                d += n2dy;    
+	            }   
+	            else   
+	            {    
+	                cy += iy;    
+	                d += n2dydx;    
+	            }           
+	  
+            cx += ix;    
+	        }    
+	    }  
+	      
+	// 如果直线与x轴夹角小于45度
+	    else   
+	    {   
+	        while((x2 - x1) > 0?cx != x2+1:cx != x2-1)   
+	        {    
+						  Drow_point(cx, cy, dat);
+	            if(d < 0)  
+	            {    
+	                d += n2dy;    
+	            }  
+	            else   
+	            {    
+	                cy += iy;    
+	                d += n2dydx;    
+	            }    
+	      
+	            cx += ix;    
+					}  
+			}
+}
+
+/*******************************************************************************
+* Function Name  : Clean
+* Description    : 清空显示区
+* Input          : None
+* Output         : None
+* Return         : None
+* Attention		 : None
+*******************************************************************************/
+void Clean(void)
+{
+	uint8_t i,j;
+	
+	for(i=0; i<Row ; i++)
+	{
+		for(j=0;j<Col/8;j++)
+		{
+			disBuff[i][j]=0x00;   //全黑
+		}
+	}
+}
+
+
+/*******************************************************************************
+* Function Name  : Light
+* Description    : 全部点亮灯
+* Input          : None
+* Output         : None
+* Return         : None
+* Attention		 : None
+*******************************************************************************/
+void Light(void)
+{
+	   uint8_t i,j;
+		for(i=0; i<Row ; i++)
+				{
+						for(j=0;j<Col/8;j++)
+						{
+								disBuff[i][j]=0xFF;   //全亮
+						}
+				}
+}
+
+/*******************************************************************************
+* Function Name  : Delay
+* Description    : Delay Time
+* Input          : - nCount: Delay Time
+* Output         : None
+* Return         : None
+* Attention		 : None
+*******************************************************************************/
+void  Delay (uint32_t nCount)
+{
+  for(; nCount != 0; nCount--);
+}
+
+
 
 /*******************************************************************************
 * Function Name  : GPIO_Configuration
@@ -201,88 +759,7 @@ void NVIC_Configuration(void)
 }
 
 
-/*******************************************************************************
-* Function Name  : Drow_point
-* Description    : 绘制点
-* Input          : 要绘制点的x，y坐标，要绘制的值dat,1为亮
-* Output         : None
-* Return         : None
-* Attention		 : None
-*******************************************************************************/
-void Drow_point (unsigned char x,unsigned char y,unsigned char dat)
-{
-		if(dat==1)disBuff[x][y/8]|=0x80>>(y%8);
-		else disBuff[x][y/8]&=~(0x80>>(y%8));		
-}
 
-/*******************************************************************************
-* Function Name  : Drow_line
-* Description    : 绘制线
-* Input          : 起点x1，y1.终点x2，y2. 绘制的值dat，1为亮
-* Output         : None
-* Return         : None
-* Attention		 : None
-*******************************************************************************/
-void Drow_line(unsigned char x1,unsigned char y1,unsigned char x2,unsigned char y2,unsigned char dat)
-{
-	
-}
-
-
-/*******************************************************************************
-* Function Name  : Clean
-* Description    : 清空显示区
-* Input          : None
-* Output         : None
-* Return         : None
-* Attention		 : None
-*******************************************************************************/
-void Clean(void)
-{
-	uint8_t i,j;
-	
-	for(i=0; i<Row ; i++)
-	{
-		for(j=0;j<Col/8;j++)
-		{
-			disBuff[i][j]=0x00;   //全黑
-		}
-	}
-}
-
-
-/*******************************************************************************
-* Function Name  : Light
-* Description    : 全部点亮灯
-* Input          : None
-* Output         : None
-* Return         : None
-* Attention		 : None
-*******************************************************************************/
-void Light(void)
-{
-	   uint8_t i,j;
-		for(i=0; i<Row ; i++)
-				{
-						for(j=0;j<Col/8;j++)
-						{
-								disBuff[i][j]=0xFF;   //全亮
-						}
-				}
-}
-
-/*******************************************************************************
-* Function Name  : Delay
-* Description    : Delay Time
-* Input          : - nCount: Delay Time
-* Output         : None
-* Return         : None
-* Attention		 : None
-*******************************************************************************/
-void  Delay (uint32_t nCount)
-{
-  for(; nCount != 0; nCount--);
-}
 
 
 /*******************************************************************************
@@ -338,11 +815,11 @@ void MBIsenddata(uint8_t k)
 					{MBI5026_SDI7_H;}
 					else MBI5026_SDI7_L;
 					
-					//delay_us(5);
-					Delay(5);
+					
+					Delay(10);
 					MBI5026_CLK_H;
-					//delay_us(5);
-					Delay(5);
+				
+					Delay(10);
 					data1=data1>>1;
 					data2=data2>>1;
 					data3=data3>>1;
@@ -397,14 +874,15 @@ void TIM2_IRQHandler(void)
 		
      MBIsenddata(linecount);  
 		 MBI5026_OE_H;
-		 Delay(10);
+		 Delay(50);
 		 MBI5026_LE_H;    //锁存
-		 Delay(10);
+		 Delay(50);
 		 MBI5026_LE_L;   
-		 Delay(5);
+		 Delay(50);
 		 HC138_display(linecount);
+		// Delay(5);
 		 MBI5026_OE_L;
-		 Delay(5);
+		 Delay(50);
 		 if((linecount++)>=(Row/YdirNumber)-1)linecount=0;
   }	
 }
