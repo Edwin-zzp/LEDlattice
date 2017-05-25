@@ -77,8 +77,11 @@ void Delay (uint32_t nCount);
 
 void Drow_point(int x,int y,unsigned char dat);
 void Drow_line(int x1,int y1,int x2,int y2,int dat);
+void Line_move(int x1,int y1,int x2,int y2,uint8_t l,uint8_t h,uint8_t speed);
+
 void square_clock(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod,uint8_t speed);
-void square_rim(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t speed);
+void square_rim(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod,uint8_t speed);
+void square_screw(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod ,uint8_t speed);
 void square_door(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod,uint8_t speed);
 
 void Drow_circle(int xc,int yc,int r,int mod,int c );
@@ -117,7 +120,8 @@ int main(void)
 	//Drow_line(55,0,55,112,1);
 	//Drow_line(0,111,55,111,1);
 	//Drow_picture_all(Pic1);
-	Dorw_bmp(5,10,24,30,Pic2,1);
+	//Dorw_bmp(5,10,24,30,Pic2,1);
+	square_screw(5,8,15,16,1,10);
 	//disBuff[0][12]=0x80;
 	//disBuff[1][12]=0x80;
 	//disBuff[2][12]=0x80;
@@ -213,23 +217,25 @@ void Dorw_bmp(int xc,int yc,uint8_t w,uint8_t h,uint8_t *p , uint8_t mod)
 	 for(i=0;i<h;i++)
 		for(j=0;j<w/8;j++)
 		{
-			if(mod)
-				{
+			
 					//disBuff[i][j]=*(p+i*((yc+w)<Col?w:(Col-yc))+j);
 					data=*(p+i*(w/8)+j);
 					for(m=0;m<8;m++)
 					{
-								Drow_point(xc+i,yc+j*8+m,((data&0x80)==0?0:1));
-								data<<=1;
-					}	
-				}
-				else
-				{			
-					for(m=0;m<8;m++)
+						if((data&0x80)!=0)
 						{
-								Drow_point(xc+i,yc+m,0);
+							if(mod)
+							{
+								Drow_point(xc+i,yc+j*8+m,1);
+							}
+							else 
+							{
+								Drow_point(xc+i,yc+j*8+m,0);
+							}
 						}
-				}
+							
+						data<<=1;
+					}						
 		}
 }
 
@@ -414,35 +420,57 @@ void square_door(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod,uint8_t
 }
 
 /*******************************************************************************
+* Function Name  : square_screw
+* Description    : 矩形螺旋扫描
+* Input          : x1,y1,x2,y2矩形对角坐标，左上角为1顺时针方向 ,mod:1为画螺旋，0为消除螺旋 speed扫描速度
+* Output         : None
+* Return         : None
+* Attention		 : None
+*******************************************************************************/
+void square_screw(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod ,uint8_t speed)
+{
+	uint8_t i=0;
+	uint8_t mix,miy;
+	mix=x1+(x2-x1)/2;
+	miy=y1+(y2-y1)/2;
+	while(x1+i<=mix&&y1+i<=miy)
+	{
+		square_rim(x1+i,y1+i,x2-i,y2-i,(mod==1?1:0),speed);
+		i++;
+	}
+}
+
+
+/*******************************************************************************
 * Function Name  : square_rim
 * Description    : 矩形轮廓扫描
-* Input          : x1,y1,x2,y2矩形对角坐标，左上角为1顺时针方向 , speed扫描速度
+* Input          : x1,y1,x2,y2矩形对角坐标，左上角为1顺时针方向 ,mod:1为画轮廓，0为消除轮廓 speed扫描速度
 * Output         : None
 * Return         : None
 * Attention		 : None
 *******************************************************************************/
 
-void square_rim(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t speed)
+void square_rim(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod ,uint8_t speed)
 {
 	uint8_t i=0;
 	for(i=0;i<(y2-y1)+1;i++)
 	{
-		Drow_line(x1,y1,x1,i+y1,1);
+		Drow_line(x1,y1,x1,i+y1,(mod==1?1:0));
 		delay_ms(speed);
 	}
 	for(i=0;i<(x2-x1)+1;i++)
 	{
-		Drow_line(x1,y2,i+x1,y2,1);
+		Drow_line(x1,y2,i+x1,y2,(mod==1?1:0));
 		delay_ms(speed);
 	}
 	for(i=0;i<(y2-y1)+1;i++)
 	{
-		Drow_line(x2,y2,x2,y2-i,1);
+		Drow_line(x2,y2,x2,y2-i,(mod==1?1:0));
 		delay_ms(speed);
 	}
 	for(i=0;i<(x2-x1)+1;i++)
 	{
-		Drow_line(x2,y1,x2-i,y1,1);
+		Drow_line(x2,y1,x2-i,y1,(mod==1?1:0));
 		delay_ms(speed);
 	}
 }
@@ -515,9 +543,82 @@ void square_clock(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod,uint8_
 * Attention		 : None
 *******************************************************************************/
 
-void Line_move(int x1,int y2,uint8_t l,uint8_t h,uint8_t speed)
+void Line_move(int x1,int y1,int x2,int y2,uint8_t l,uint8_t h,uint8_t speed)
 {
-	
+	uint8_t i,j;
+	if(x1!=x2&&y1!=y2){return ;}   //不是水平或垂直移动
+	else 
+		if(x1==x2)  //水平移动
+		{
+			if(y1>y2)//向左移动
+			{
+				for(i=0;i<(y2-y1)+1;i++)
+				{
+					for(j=0;j<h;j++)
+					{
+						Drow_line(x1+j,y1-i,x1+j,y1-i+l,1);
+					}
+					delay_ms(speed);
+					for(j=0;j<h;j++)
+					{
+						Drow_line(x1+j,y1-i,x1+j,y1-i+l,0);
+					}
+					delay_ms(speed/2);
+				}
+			}
+			else   //向右移动
+			{
+				for(i=0;i<(y1-y2)+1;i++)
+				{
+					for(j=0;j<h;j++)
+					{
+						Drow_line(x1+j,y1+i,x1+j,y1+i-l,1);
+					}
+					delay_ms(speed);
+					for(j=0;j<h;j++)
+					{
+						Drow_line(x1+j,y1+i,x1+j,y1+i-l,0);
+					}
+					delay_ms(speed/2);
+				}
+			}
+		}
+		else
+			if(y1==y2)  // 垂直移动
+			{
+				if(x1>x2) //向上移动
+				{
+					for(i=0;i<(x1-x2)+1;i++)
+					{
+						for(j=0;j<h;j++)
+						{
+							Drow_line(x1-i,y1+j,x1-i+l,y1+j,1);
+						}
+						delay_ms(speed);
+						for(j=0;j<h;j++)
+						{
+							Drow_line(x1-i,y1+j,x1-i+l,y1+j,0);
+						}
+						delay_ms(speed/2);
+					}
+				}
+				else   //向下移动
+				{
+					for(i=0;i<(x2-x1)+1;i++)
+					{
+						for(j=0;j<h;j++)
+						{
+							Drow_line(x1+i,y1+j,x1+i-l,y1+j,1);
+						}
+						delay_ms(speed);
+						for(j=0;j<h;j++)
+						{
+							Drow_line(x1+i,y1+j,x1+i-l,y1+j,0);
+						}
+						delay_ms(speed/2);
+					}
+				}
+			}
 }
 
 
