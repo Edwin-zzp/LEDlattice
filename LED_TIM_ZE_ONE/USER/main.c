@@ -134,7 +134,7 @@ int main(void)
     /* Infinite loop */
     while (1)
 		{
-		//±àĞ´³ÌĞò¸üĞÂÏÔÊ¾¿âdisBuffÊı×é£»
+		//ç¼–å†™ç¨‹åºæ›´æ–°æ˜¾ç¤ºåº“disBuffæ•°ç»„ï¼›
 		/*	for(i=0; i<Row ; i++)
 				{
 						for(j=0;j<Col/8;j++)
@@ -198,8 +198,8 @@ int main(void)
 
 /*******************************************************************************
 * Function Name  : Dorw_bmp
-* Description    : »æÖÆÔ²
-* Input          : xc¡¢ycÌùÍ¼×óÉÏ½ÇÎ»ÖÃ¡£w£¬hÎªÍ¼Æ¬¿í¸ß¡£pÎ»Í¼Æ¬Êı×é¡£modÎª1Ê±ÌùÍ¼£¬Îª0Ê±É¾Í¼
+* Description    : è´´å›¾
+* Input          : xcã€ycè´´å›¾å·¦ä¸Šè§’ä½ç½®ã€‚wï¼Œhä¸ºå›¾ç‰‡å®½é«˜ã€‚pä½å›¾ç‰‡æ•°ç»„ã€‚modä¸º1æ—¶è´´å›¾ï¼Œä¸º0æ—¶åˆ å›¾
 * Output         : None
 * Return         : None
 * Attention		 : None
@@ -223,15 +223,8 @@ void Dorw_bmp(int xc,int yc,uint8_t w,uint8_t h,uint8_t *p , uint8_t mod)
 					for(m=0;m<8;m++)
 					{
 						if((data&0x80)!=0)
-						{
-							if(mod)
-							{
-								Drow_point(xc+i,yc+j*8+m,1);
-							}
-							else 
-							{
-								Drow_point(xc+i,yc+j*8+m,0);
-							}
+						{		
+							Drow_point(xc+i,yc+j*8+m,(mod==1?1:0));					
 						}
 							
 						data<<=1;
@@ -242,8 +235,8 @@ void Dorw_bmp(int xc,int yc,uint8_t w,uint8_t h,uint8_t *p , uint8_t mod)
 
 /*******************************************************************************
 * Function Name  : Drow_picture_all
-* Description    : »æÖÆÍ¼Æ¬
-* Input          : »æÖÆÍ¼Æ¬µÄÊı×éµØÖ·
+* Description    : ç»˜åˆ¶å›¾ç‰‡å…¨å±å›¾ç‰‡
+* Input          : ç»˜åˆ¶å›¾ç‰‡çš„æ•°ç»„åœ°å€
 * Output         : None
 * Return         : None
 * Attention		 : None
@@ -263,8 +256,8 @@ void Drow_picture_all(unsigned char *p)
 
 /*******************************************************************************
 * Function Name  : Drow_circle
-* Description    : »æÖÆÔ²
-* Input          : x1,y1,Ô²ĞÄ£¬r°ë¾¶¡£ mod É¨Ãè·½Ê½. c,1Îª»­Ô²£¬0Îª²Á³ıÔ²£¬speed»­Ô²ËÙ¶È
+* Description    : ç»˜åˆ¶åœ†
+* Input          : x1,y1,åœ†å¿ƒï¼ŒråŠå¾„ã€‚ mod æ‰«ææ–¹å¼. c,1ä¸ºç”»åœ†ï¼Œ0ä¸ºæ“¦é™¤åœ†ï¼Œspeedç”»åœ†é€Ÿåº¦
 * Output         : None
 * Return         : None
 * Attention		 : None
@@ -285,7 +278,7 @@ void _draw_circle_8(int xc, int yc, int x, int y, unsigned char c)
 
 void Drow_circle(int xc,int yc,int r,int mod,int c )
 {
-	  //xc¡¢ycÎªÔ²ĞÄ×ø±ê£¬
+	  //xcã€ycä¸ºåœ†å¿ƒåæ ‡ï¼Œ
 	   int x = 0, y = r, yi, d;   
 		//int x = 0, y = r, yi ; 
 	 // float d=0.0;
@@ -299,7 +292,7 @@ void Drow_circle(int xc,int yc,int r,int mod,int c )
 			   d=1-r;
 	 /*   if(mod)  
 	    {    
-	        // »­ÊµĞÄÔ²  
+	        // ç”»å®å¿ƒåœ†  
 	        while(x <= y)   
 	        {    
 	            for(yi = x; yi <= y; yi ++)    
@@ -321,7 +314,7 @@ void Drow_circle(int xc,int yc,int r,int mod,int c )
 	    }   
 	    else   
 	    {    
-	        // »­¿ÕĞÄÔ²    
+	        // ç”»ç©ºå¿ƒåœ†    
 	        while (x <= y)   
 	        {    
 	            _draw_circle_8(xc, yc, x, y, c);    
@@ -341,7 +334,7 @@ void Drow_circle(int xc,int yc,int r,int mod,int c )
 	    } */
 			 if(mod)  
 	    {    
-	        // »­ÊµĞÄÔ²  
+	        // ç”»å®å¿ƒåœ†  
 	        while(x <= y)   
 	        {    
 	            for(yi = x; yi <= y; yi ++)    
@@ -363,7 +356,7 @@ void Drow_circle(int xc,int yc,int r,int mod,int c )
 	    }   
 	    else   
 	    {    
-	        // »­¿ÕĞÄÔ²    
+	        // ç”»ç©ºå¿ƒåœ†    
 	        while (x <= y)   
 	        {    
 	            _draw_circle_8(xc, yc, x, y, c);    
@@ -387,8 +380,8 @@ void Drow_circle(int xc,int yc,int r,int mod,int c )
 
 /*******************************************************************************
 * Function Name  : square_door
-* Description    : ¾ØĞÎ·¶Î§¿ªÃÅ
-* Input          : x1,y1,x2,y2Õı·½ĞÎ¶Ô½Ç×ø±ê£¬×óÉÏ½ÇÎª1Ë³Ê±Õë·½Ïò ,  mod É¨Ãè·½Ê½ 0ÊÇ×ó±ß¿ªÃÅ£¬1ÊÇÖĞ¼äÍùÁ½±ß¿ª .   speedÉ¨ÃèËÙ¶È
+* Description    : çŸ©å½¢èŒƒå›´å¼€é—¨
+* Input          : x1,y1,x2,y2æ­£æ–¹å½¢å¯¹è§’åæ ‡ï¼Œå·¦ä¸Šè§’ä¸º1é¡ºæ—¶é’ˆæ–¹å‘ ,  mod æ‰«ææ–¹å¼ 0æ˜¯å·¦è¾¹å¼€é—¨ï¼Œ1æ˜¯ä¸­é—´å¾€ä¸¤è¾¹å¼€ .   speedæ‰«æé€Ÿåº¦
 * Output         : None
 * Return         : None
 * Attention		 : None
@@ -421,8 +414,8 @@ void square_door(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod,uint8_t
 
 /*******************************************************************************
 * Function Name  : square_screw
-* Description    : ¾ØĞÎÂİĞıÉ¨Ãè
-* Input          : x1,y1,x2,y2¾ØĞÎ¶Ô½Ç×ø±ê£¬×óÉÏ½ÇÎª1Ë³Ê±Õë·½Ïò ,mod:1Îª»­ÂİĞı£¬0ÎªÏû³ıÂİĞı speedÉ¨ÃèËÙ¶È
+* Description    : çŸ©å½¢èºæ—‹æ‰«æ
+* Input          : x1,y1,x2,y2çŸ©å½¢å¯¹è§’åæ ‡ï¼Œå·¦ä¸Šè§’ä¸º1é¡ºæ—¶é’ˆæ–¹å‘ ,mod:1ä¸ºç”»èºæ—‹ï¼Œ0ä¸ºæ¶ˆé™¤èºæ—‹ speedæ‰«æé€Ÿåº¦
 * Output         : None
 * Return         : None
 * Attention		 : None
@@ -443,8 +436,8 @@ void square_screw(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod ,uint8
 
 /*******************************************************************************
 * Function Name  : square_rim
-* Description    : ¾ØĞÎÂÖÀªÉ¨Ãè
-* Input          : x1,y1,x2,y2¾ØĞÎ¶Ô½Ç×ø±ê£¬×óÉÏ½ÇÎª1Ë³Ê±Õë·½Ïò ,mod:1Îª»­ÂÖÀª£¬0ÎªÏû³ıÂÖÀª speedÉ¨ÃèËÙ¶È
+* Description    : çŸ©å½¢è½®å»“æ‰«æ
+* Input          : x1,y1,x2,y2çŸ©å½¢å¯¹è§’åæ ‡ï¼Œå·¦ä¸Šè§’ä¸º1é¡ºæ—¶é’ˆæ–¹å‘ ,mod:1ä¸ºç”»è½®å»“ï¼Œ0ä¸ºæ¶ˆé™¤è½®å»“ speedæ‰«æé€Ÿåº¦
 * Output         : None
 * Return         : None
 * Attention		 : None
@@ -478,8 +471,8 @@ void square_rim(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod ,uint8_t
 
 /*******************************************************************************
 * Function Name  : square_clock
-* Description    : ¾ØĞÎÂÖÀªÒÔÖÓ±íÉ¨Ãè·½Ê½Ìî³ä
-* Input          : x1,y1,x2,y2Õı·½ĞÎ¶Ô½Ç×ø±ê£¬×óÉÏ½ÇÎª1Ë³Ê±Õë·½Ïò ,  mod É¨Ãè·½Ê½£¬1ÎªÌî³äÉ¨Ãè£¬0ÎªÖ¸ÕëÉ¨Ãè .   speedÉ¨ÃèËÙ¶È
+* Description    : çŸ©å½¢è½®å»“ä»¥é’Ÿè¡¨æ‰«ææ–¹å¼å¡«å……
+* Input          : x1,y1,x2,y2æ­£æ–¹å½¢å¯¹è§’åæ ‡ï¼Œå·¦ä¸Šè§’ä¸º1é¡ºæ—¶é’ˆæ–¹å‘ ,  mod æ‰«ææ–¹å¼ï¼Œ1ä¸ºå¡«å……æ‰«æï¼Œ0ä¸ºæŒ‡é’ˆæ‰«æ .   speedæ‰«æé€Ÿåº¦
 * Output         : None
 * Return         : None
 * Attention		 : None
@@ -536,8 +529,8 @@ void square_clock(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod,uint8_
 
 /*******************************************************************************
 * Function Name  : Line_move
-* Description    : Ïß¶ÎÒÆ¶¯   Ë®Æ½´¹Ö±ÒÆ¶¯
-* Input          : x1,y1Ïß¶ÎµÄÍ·×ø±ê¡£x2£¬y2Ïß¶ÎÔË¶¯ÖÕµã×ø±ê¡£l£ºÏß³¤¶È¡£h£ºÏß¶Î¿í¶È¡£speed£ºÒÆ¶¯ËÙ¶È
+* Description    : çº¿æ®µç§»åŠ¨   æ°´å¹³å‚ç›´ç§»åŠ¨
+* Input          : x1,y1çº¿æ®µçš„å¤´åæ ‡ã€‚x2ï¼Œy2çº¿æ®µè¿åŠ¨ç»ˆç‚¹åæ ‡ã€‚lï¼šçº¿é•¿åº¦ã€‚hï¼šçº¿æ®µå®½åº¦ã€‚speedï¼šç§»åŠ¨é€Ÿåº¦
 * Output         : None
 * Return         : None
 * Attention		 : None
@@ -546,11 +539,11 @@ void square_clock(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t mod,uint8_
 void Line_move(int x1,int y1,int x2,int y2,uint8_t l,uint8_t h,uint8_t speed)
 {
 	uint8_t i,j;
-	if(x1!=x2&&y1!=y2){return ;}   //²»ÊÇË®Æ½»ò´¹Ö±ÒÆ¶¯
+	if(x1!=x2&&y1!=y2){return ;}   //ä¸æ˜¯æ°´å¹³æˆ–å‚ç›´ç§»åŠ¨
 	else 
-		if(x1==x2)  //Ë®Æ½ÒÆ¶¯
+		if(x1==x2)  //æ°´å¹³ç§»åŠ¨
 		{
-			if(y1>y2)//Ïò×óÒÆ¶¯
+			if(y1>y2)//å‘å·¦ç§»åŠ¨
 			{
 				for(i=0;i<(y2-y1)+1;i++)
 				{
@@ -566,7 +559,7 @@ void Line_move(int x1,int y1,int x2,int y2,uint8_t l,uint8_t h,uint8_t speed)
 					delay_ms(speed/2);
 				}
 			}
-			else   //ÏòÓÒÒÆ¶¯
+			else   //å‘å³ç§»åŠ¨
 			{
 				for(i=0;i<(y1-y2)+1;i++)
 				{
@@ -584,9 +577,9 @@ void Line_move(int x1,int y1,int x2,int y2,uint8_t l,uint8_t h,uint8_t speed)
 			}
 		}
 		else
-			if(y1==y2)  // ´¹Ö±ÒÆ¶¯
+			if(y1==y2)  // å‚ç›´ç§»åŠ¨
 			{
-				if(x1>x2) //ÏòÉÏÒÆ¶¯
+				if(x1>x2) //å‘ä¸Šç§»åŠ¨
 				{
 					for(i=0;i<(x1-x2)+1;i++)
 					{
@@ -602,7 +595,7 @@ void Line_move(int x1,int y1,int x2,int y2,uint8_t l,uint8_t h,uint8_t speed)
 						delay_ms(speed/2);
 					}
 				}
-				else   //ÏòÏÂÒÆ¶¯
+				else   //å‘ä¸‹ç§»åŠ¨
 				{
 					for(i=0;i<(x2-x1)+1;i++)
 					{
@@ -625,8 +618,8 @@ void Line_move(int x1,int y1,int x2,int y2,uint8_t l,uint8_t h,uint8_t speed)
 
 /*******************************************************************************
 * Function Name  : Drow_point
-* Description    : »æÖÆµã
-* Input          : Òª»æÖÆµãµÄx£¬y×ø±ê£¬Òª»æÖÆµÄÖµdat,1ÎªÁÁ
+* Description    : ç»˜åˆ¶ç‚¹
+* Input          : è¦ç»˜åˆ¶ç‚¹çš„xï¼Œyåæ ‡ï¼Œè¦ç»˜åˆ¶çš„å€¼dat,1ä¸ºäº®
 * Output         : None
 * Return         : None
 * Attention		 : None
@@ -647,8 +640,8 @@ void Drow_point (int x,int y,unsigned char dat)
 
 /*******************************************************************************
 * Function Name  : Drow_line
-* Description    : »æÖÆÏß
-* Input          : Æğµãx1£¬y1.ÖÕµãx2£¬y2. »æÖÆµÄÖµdat£¬1ÎªÁÁ
+* Description    : ç»˜åˆ¶çº¿
+* Input          : èµ·ç‚¹x1ï¼Œy1.ç»ˆç‚¹x2ï¼Œy2. ç»˜åˆ¶çš„å€¼datï¼Œ1ä¸ºäº®
 * Output         : None
 * Return         : None
 * Attention		 : None
@@ -688,7 +681,7 @@ void Drow_line(int x1,int y1,int x2,int y2,int dat)
 	        n2dydx = (dy - dx) * 2;    
 	        d = dy * 2 - dx;        
   
-	//Èç¹ûÖ±ÏßÓëxÖá¼Ğ½Ç´óÓÚ45¶È
+	//å¦‚æœç›´çº¿ä¸xè½´å¤¹è§’å¤§äº45åº¦
 	    if(yy)  
 	    {   
 				while((x2 - x1) > 0?cx != x2+1:cx != x2-1)   
@@ -708,7 +701,7 @@ void Drow_line(int x1,int y1,int x2,int y2,int dat)
 	        }    
 	    }  
 	      
-	// Èç¹ûÖ±ÏßÓëxÖá¼Ğ½ÇĞ¡ÓÚ45¶È
+	// å¦‚æœç›´çº¿ä¸xè½´å¤¹è§’å°äº45åº¦
 	    else   
 	    {   
 	        while((x2 - x1) > 0?cx != x2+1:cx != x2-1)   
@@ -731,7 +724,7 @@ void Drow_line(int x1,int y1,int x2,int y2,int dat)
 
 /*******************************************************************************
 * Function Name  : Clean
-* Description    : Çå¿ÕÏÔÊ¾Çø
+* Description    : æ¸…ç©ºæ˜¾ç¤ºåŒº
 * Input          : None
 * Output         : None
 * Return         : None
@@ -745,7 +738,7 @@ void Clean(void)
 	{
 		for(j=0;j<Col/8;j++)
 		{
-			disBuff[i][j]=0x00;   //È«ºÚ
+			disBuff[i][j]=0x00;   //å…¨é»‘
 		}
 	}
 }
@@ -753,7 +746,7 @@ void Clean(void)
 
 /*******************************************************************************
 * Function Name  : Light
-* Description    : È«²¿µãÁÁµÆ
+* Description    : å…¨éƒ¨ç‚¹äº®ç¯
 * Input          : None
 * Output         : None
 * Return         : None
@@ -766,7 +759,7 @@ void Light(void)
 				{
 						for(j=0;j<Col/8;j++)
 						{
-								disBuff[i][j]=0xFF;   //È«ÁÁ
+								disBuff[i][j]=0xFF;   //å…¨äº®
 						}
 				}
 }
@@ -822,22 +815,22 @@ void GPIO_Configuration(void)
 *******************************************************************************/
 void TIM_Configuration(void)
 {
-  TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;		  //¶¨ÒåÒ»¸ö½á¹¹Ìå
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , ENABLE);	  //Ê¹ÄÜTIM2ÍâÉè
+  TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;		  //å®šä¹‰ä¸€ä¸ªç»“æ„ä½“
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , ENABLE);	  //ä½¿èƒ½TIM2å¤–è®¾
   TIM_DeInit(TIM2);
-  TIM_TimeBaseStructure.TIM_Period=100;		 		  /*×Ô¶¯ÖØ×°ÔØ¼Ä´æ
-  															Æ÷ÖÜÆÚµÄÖµ(¼ÆÊıÖµ) 
-												            ÀÛ¼Æ TIM_Period¸ö
-															ÆµÂÊºó²úÉúÒ»¸ö¸üĞÂ
-															»òÕßÖĞ¶Ï */
-  TIM_TimeBaseStructure.TIM_Prescaler= (720 - 1);		 // Ê±ÖÓÔ¤·ÖÆµÊı   ·Ö³öÊ±ÖÓ=Ö÷Æµ/£¨·ÖÆµÏµÊı-1£©10us£»100kHz£»
-  TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1;  // ²ÉÑù·ÖÆµ 
-  TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up;// ÏòÉÏ¼ÆÊıÄ£Ê½ 
-  TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);/*¸ù¾İTIM_TimeBaseStructureÖĞÖ¸¶¨
-  												  µÄ²ÎÊı³õÊ¼»¯TIM2µÄÊ±¼ä»ùÊıµ¥Î» */
-  TIM_ClearFlag(TIM2, TIM_FLAG_Update);					// Çå³ıÒç³öÖĞ¶Ï±êÖ¾ 
-  TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE);				//Ê¹ÄÜÖĞ¶Ï
-  TIM_Cmd(TIM2, ENABLE);								// ¿ªÆôÊ±ÖÓ 
+  TIM_TimeBaseStructure.TIM_Period=100;		 		  /*è‡ªåŠ¨é‡è£…è½½å¯„å­˜
+  															å™¨å‘¨æœŸçš„å€¼(è®¡æ•°å€¼) 
+												            ç´¯è®¡ TIM_Periodä¸ª
+															é¢‘ç‡åäº§ç”Ÿä¸€ä¸ªæ›´æ–°
+															æˆ–è€…ä¸­æ–­ */
+  TIM_TimeBaseStructure.TIM_Prescaler= (720 - 1);		 // æ—¶é’Ÿé¢„åˆ†é¢‘æ•°   åˆ†å‡ºæ—¶é’Ÿ=ä¸»é¢‘/ï¼ˆåˆ†é¢‘ç³»æ•°-1ï¼‰10usï¼›100kHzï¼›
+  TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1;  // é‡‡æ ·åˆ†é¢‘ 
+  TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up;// å‘ä¸Šè®¡æ•°æ¨¡å¼ 
+  TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);/*æ ¹æ®TIM_TimeBaseStructureä¸­æŒ‡å®š
+  												  çš„å‚æ•°åˆå§‹åŒ–TIM2çš„æ—¶é—´åŸºæ•°å•ä½ */
+  TIM_ClearFlag(TIM2, TIM_FLAG_Update);					// æ¸…é™¤æº¢å‡ºä¸­æ–­æ ‡å¿— 
+  TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE);				//ä½¿èƒ½ä¸­æ–­
+  TIM_Cmd(TIM2, ENABLE);								// å¼€å¯æ—¶é’Ÿ 
 }
 
 /*******************************************************************************
@@ -850,12 +843,12 @@ void TIM_Configuration(void)
 *******************************************************************************/
 void NVIC_Configuration(void)
 {
-  NVIC_InitTypeDef NVIC_InitStructure;            //¶¨ÒåÒ»¸ö½á¹¹Ìå	 
-  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0); //ÉèÖÃÓÅÏÈ¼¶×é  													
-  NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn; //ÉèÖÃ TIM2ÓÅÏÈ¼¶	  
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;	//ÅäÖÃÇÀ¶ÏÓÅÏÈ¼¶
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;   //ÅäÖÃÏìÓ¦ÓÅÏÈ¼¶	
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;	 //Ê¹ÄÜÓÅÏÈ¼¶
+  NVIC_InitTypeDef NVIC_InitStructure;            //å®šä¹‰ä¸€ä¸ªç»“æ„ä½“	 
+  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0); //è®¾ç½®ä¼˜å…ˆçº§ç»„  													
+  NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn; //è®¾ç½® TIM2ä¼˜å…ˆçº§	  
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;	//é…ç½®æŠ¢æ–­ä¼˜å…ˆçº§
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;   //é…ç½®å“åº”ä¼˜å…ˆçº§	
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;	 //ä½¿èƒ½ä¼˜å…ˆçº§
   NVIC_Init(&NVIC_InitStructure);
 }
 
@@ -865,7 +858,7 @@ void NVIC_Configuration(void)
 
 /*******************************************************************************
 * Function Name  : MBIsenddata
-* Description    : ÁĞÊı¾İÒÆÎ»³ÌĞò 
+* Description    : åˆ—æ•°æ®ç§»ä½ç¨‹åº 
 * Input          : None
 * Output         : None
 * Return         : None
@@ -875,7 +868,7 @@ void MBIsenddata(uint8_t k)
 {
 	  int8_t i;
 		uint8_t j;
-		uint8_t data1,data2,data3,data4,data5,data6,data7;//Æß¿éÁĞÊı¾İÒ»ÆğÒÆÎ»
+		uint8_t data1,data2,data3,data4,data5,data6,data7;//ä¸ƒå—åˆ—æ•°æ®ä¸€èµ·ç§»ä½
 	for(i=(Col/8)-1;i>=0;i--)
 	{
 		data1=disBuff[k][i];
@@ -935,7 +928,7 @@ void MBIsenddata(uint8_t k)
 
 /*******************************************************************************
 * Function Name  : HC138_display
-* Description    : ĞĞ¿ØÖÆ³ÌĞò
+* Description    : è¡Œæ§åˆ¶ç¨‹åº
 * Input          : None
 * Output         : None
 * Return         : None
@@ -944,7 +937,7 @@ void MBIsenddata(uint8_t k)
 void HC138_display(uint8_t m)
 {
 	switch(m)
-	{ //µÚÒ»Æ¬138
+	{ //ç¬¬ä¸€ç‰‡138
 		case  7 :   H138_D_H; H138_C_L; H138_B_L; H138_A_L; break; 
 		case  6 :   H138_D_H; H138_C_L; H138_B_L; H138_A_H; break; 
 		case  5 :   H138_D_H; H138_C_L; H138_B_H; H138_A_L; break; 
@@ -970,13 +963,13 @@ void TIM2_IRQHandler(void)
 {
     
 	if ( TIM_GetITStatus(TIM2 , TIM_IT_Update) != RESET ) 
-	{	//¼ì²âÊÇ·ñ·¢ÉúÒç³ö¸üĞÂÊÂ¼ş
+	{	//æ£€æµ‹æ˜¯å¦å‘ç”Ÿæº¢å‡ºæ›´æ–°äº‹ä»¶
 		TIM_ClearITPendingBit(TIM2 , TIM_FLAG_Update);
 		
      MBIsenddata(linecount);  
 		 MBI5026_OE_H;
 		 Delay(50);
-		 MBI5026_LE_H;    //Ëø´æ
+		 MBI5026_LE_H;    //é”å­˜
 		 Delay(50);
 		 MBI5026_LE_L;   
 		 Delay(50);
